@@ -7,7 +7,7 @@ import {
     Coins,
     HandCoins,
 } from "lucide-vue-next";
-import { Head } from "@inertiajs/vue3";
+import { Head, usePage } from "@inertiajs/vue3";
 import NavLink from "@/Components/NavLink.vue";
 
 const options = ref({
@@ -31,6 +31,8 @@ const lineChartOptions = ref({
 const series = ref([
     { name: "series-1", data: [30, 40, 45, 50, 49, 60, 70, 91] },
 ]);
+
+const popularProducts = usePage().props.popularProducts;
 </script>
 
 <template>
@@ -228,7 +230,7 @@ const series = ref([
                 <h2 class="px-5">Top Selling</h2>
 
                 <div class="w-full">
-                    <table class="w-full table-auto">
+                    <table class="w-full table-auto [&_*]:border">
                         <thead>
                             <tr class="border-y">
                                 <th class="py-3 pl-4 text-left">
@@ -249,17 +251,26 @@ const series = ref([
                         <tbody>
                             <tr
                                 class="border-b"
-                                v-for="i in Array.from({ length: 10 }).map(
-                                    (_, i) => i,
-                                )"
-                                :key="i"
+                                v-for="{
+                                    id,
+                                    name,
+                                    stock,
+                                    price,
+                                } in popularProducts"
+                                :key="id"
                             >
                                 <td class="py-6 pl-4">
-                                    <span>Surf Excel</span>
+                                    <span>{{ name }}</span>
                                 </td>
-                                <td><span>30</span></td>
-                                <td><span>12</span></td>
-                                <td><span>Rp 100.000</span></td>
+                                <td>
+                                    <span>{{ stock }}</span>
+                                </td>
+                                <td>
+                                    <span>{{ stock }}</span>
+                                </td>
+                                <td>
+                                    <span>{{ price }}</span>
+                                </td>
                             </tr>
                         </tbody>
                     </table>
