@@ -1,152 +1,159 @@
 <script setup lang="ts">
-import { ref } from 'vue';
-import ApplicationLogo from '@/Components/ApplicationLogo.vue';
-import Dropdown from '@/Components/Dropdown.vue';
-import DropdownLink from '@/Components/DropdownLink.vue';
-import NavLink from '@/Components/NavLink.vue';
-import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
-import { Link } from '@inertiajs/vue3';
+import { computed, ref } from "vue";
+import {
+    Bolt,
+    Boxes,
+    CircleUserRound,
+    Ellipsis,
+    LayoutDashboard,
+    ListChecks,
+    LogOut,
+    Package,
+    SquareKanban,
+} from "lucide-vue-next";
+import NavLink from "@/Components/NavLink.vue";
+import { useMediaQuery } from "@/composables/mediaQuery";
 
-const showingNavigationDropdown = ref(false);
+const isMediumScreen = useMediaQuery("(min-width: 768px)");
+const isLargeScreen = useMediaQuery("(min-width: 1024px)");
+const isSmallScreen = useMediaQuery("(max-width: 640px)");
+
+const isMenuOpen = ref<boolean>(false);
 </script>
 
 <template>
-    <div>
-        <div class="min-h-screen bg-gray-100 dark:bg-gray-900">
-            <nav class="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
-                <!-- Primary Navigation Menu -->
-                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div class="flex justify-between h-16">
-                        <div class="flex">
-                            <!-- Logo -->
-                            <div class="shrink-0 flex items-center">
-                                <Link :href="route('dashboard')">
-                                    <ApplicationLogo
-                                        class="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200"
-                                    />
-                                </Link>
-                            </div>
+    <div
+        class="min-h-screen bg-[#F0F1F3] lg:grid lg:grid-cols-[280px,1fr] lg:grid-rows-[74px,1fr]"
+    >
+        <aside
+            class="fixed bottom-0 left-0 w-full bg-white px-6 py-2 lg:relative lg:row-span-2"
+        >
+            <div
+                class="flex w-full flex-wrap justify-between lg:fixed lg:left-0 lg:top-0 lg:max-h-[960px] lg:w-[280px] lg:flex-col lg:flex-nowrap lg:gap-y-8 lg:overflow-auto lg:p-6"
+            >
+                <div class="hidden p-1 lg:block">Invtry</div>
 
-                            <!-- Navigation Links -->
-                            <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
-                                <NavLink :href="route('dashboard')" :active="route().current('dashboard')">
-                                    Dashboard
-                                </NavLink>
-                            </div>
-                        </div>
-
-                        <div class="hidden sm:flex sm:items-center sm:ms-6">
-                            <!-- Settings Dropdown -->
-                            <div class="ms-3 relative">
-                                <Dropdown align="right" width="48">
-                                    <template #trigger>
-                                        <span class="inline-flex rounded-md">
-                                            <button
-                                                type="button"
-                                                class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150"
-                                            >
-                                                {{ $page.props.auth.user.name }}
-
-                                                <svg
-                                                    class="ms-2 -me-0.5 h-4 w-4"
-                                                    xmlns="http://www.w3.org/2000/svg"
-                                                    viewBox="0 0 20 20"
-                                                    fill="currentColor"
-                                                >
-                                                    <path
-                                                        fill-rule="evenodd"
-                                                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                                                        clip-rule="evenodd"
-                                                    />
-                                                </svg>
-                                            </button>
-                                        </span>
-                                    </template>
-
-                                    <template #content>
-                                        <DropdownLink :href="route('profile.edit')"> Profile </DropdownLink>
-                                        <DropdownLink :href="route('logout')" method="post" as="button">
-                                            Log Out
-                                        </DropdownLink>
-                                    </template>
-                                </Dropdown>
-                            </div>
-                        </div>
-
-                        <!-- Hamburger -->
-                        <div class="-me-2 flex items-center sm:hidden">
-                            <button
-                                @click="showingNavigationDropdown = !showingNavigationDropdown"
-                                class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 dark:text-gray-500 hover:text-gray-500 dark:hover:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-900 focus:outline-none focus:bg-gray-100 dark:focus:bg-gray-900 focus:text-gray-500 dark:focus:text-gray-400 transition duration-150 ease-in-out"
-                            >
-                                <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
-                                    <path
-                                        :class="{
-                                            hidden: showingNavigationDropdown,
-                                            'inline-flex': !showingNavigationDropdown,
-                                        }"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M4 6h16M4 12h16M4 18h16"
-                                    />
-                                    <path
-                                        :class="{
-                                            hidden: !showingNavigationDropdown,
-                                            'inline-flex': showingNavigationDropdown,
-                                        }"
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M6 18L18 6M6 6l12 12"
-                                    />
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Responsive Navigation Menu -->
-                <div
-                    :class="{ block: showingNavigationDropdown, hidden: !showingNavigationDropdown }"
-                    class="sm:hidden"
+                <NavLink
+                    href="/dashboard"
+                    :icon="LayoutDashboard"
+                    :class="!isLargeScreen && 'flex-col gap-y-2 text-xs'"
+                    :active="route().current('dashboard')"
                 >
-                    <div class="pt-2 pb-3 space-y-1">
-                        <ResponsiveNavLink :href="route('dashboard')" :active="route().current('dashboard')">
-                            Dashboard
-                        </ResponsiveNavLink>
-                    </div>
+                    Dashboard
+                </NavLink>
 
-                    <!-- Responsive Settings Options -->
-                    <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
-                        <div class="px-4">
-                            <div class="font-medium text-base text-gray-800 dark:text-gray-200">
-                                {{ $page.props.auth.user.name }}
-                            </div>
-                            <div class="font-medium text-sm text-gray-500">{{ $page.props.auth.user.email }}</div>
-                        </div>
+                <NavLink
+                    href="/inventories"
+                    :icon="Boxes"
+                    :class="!isLargeScreen && 'flex-col gap-y-2 text-xs'"
+                    :active="route().current('inventories')"
+                >
+                    Inventory
+                </NavLink>
 
-                        <div class="mt-3 space-y-1">
-                            <ResponsiveNavLink :href="route('profile.edit')"> Profile </ResponsiveNavLink>
-                            <ResponsiveNavLink :href="route('logout')" method="post" as="button">
-                                Log Out
-                            </ResponsiveNavLink>
-                        </div>
+                <NavLink
+                    href="/reports"
+                    :icon="SquareKanban"
+                    :class="{
+                        hidden: isSmallScreen,
+                        'flex-col gap-y-2 text-xs': !isLargeScreen,
+                    }"
+                    :active="route().current('reports')"
+                >
+                    Report
+                </NavLink>
+
+                <NavLink
+                    href="/suppliers"
+                    :icon="CircleUserRound"
+                    :class="{
+                        hidden: isSmallScreen,
+                        'flex-col gap-y-2 text-xs': !isLargeScreen,
+                    }"
+                    :active="route().current('suppliers')"
+                >
+                    Supplier
+                </NavLink>
+
+                <NavLink
+                    href="/orders"
+                    :icon="Package"
+                    :class="{
+                        hidden: isSmallScreen,
+                        'flex-col gap-y-2 text-xs': !isLargeScreen,
+                    }"
+                    :active="route().current('orders')"
+                >
+                    Order
+                </NavLink>
+
+                <NavLink
+                    href="/stores"
+                    :icon="ListChecks"
+                    :class="{
+                        hidden: isSmallScreen,
+                        'flex-col gap-y-2 text-xs': !isLargeScreen,
+                    }"
+                    :active="route().current('stores')"
+                >
+                    Manage Store
+                </NavLink>
+
+                <button
+                    class="flex flex-col items-center justify-between gap-x-4 px-1 pt-1 text-xs font-medium leading-5 transition duration-150 ease-in-out focus:outline-none sm:hidden"
+                    :class="
+                        isMenuOpen
+                            ? 'text-[color:#1570EF]'
+                            : 'text-[color:#5D6679] hover:text-[color:#1570EF]'
+                    "
+                    @click="isMenuOpen = !isMenuOpen"
+                >
+                    <Ellipsis class="h-5 w-5" />
+
+                    More
+                </button>
+            </div>
+
+            <Transition
+                enter-from-class="scale-0 opacity-0"
+                enter-active-class="transition-all duration-300 ease-out"
+                enter-to-class="scale-1 opacity-100"
+                leave-from-class="scale-1 opacity-100"
+                leave-active-class="transition-all duration-300 ease-out"
+                leave-to-class="scale-0 opacity-0"
+            >
+                <div
+                    class="fixed bottom-20 right-5 max-h-40 overflow-auto rounded bg-white shadow-md"
+                    v-if="isMenuOpen && isSmallScreen"
+                >
+                    <div class="flex w-full flex-col gap-y-3 p-3">
+                        <NavLink href="/reports" :icon="SquareKanban">
+                            Reports
+                        </NavLink>
+
+                        <NavLink href="/suppliers" :icon="CircleUserRound">
+                            Suppliers
+                        </NavLink>
+
+                        <NavLink href="/orders" :icon="Package">Orders</NavLink>
+
+                        <NavLink href="/stores" :icon="ListChecks">
+                            Manage Store
+                        </NavLink>
                     </div>
                 </div>
+            </Transition>
+        </aside>
+
+        <header class="w-full bg-white p-6">
+            <nav class="flex items-center justify-between">
+                <div>search bar</div>
+                <div>notif user</div>
             </nav>
+        </header>
 
-            <!-- Page Heading -->
-            <header class="bg-white dark:bg-gray-800 shadow" v-if="$slots.header">
-                <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                    <slot name="header" />
-                </div>
-            </header>
-
-            <!-- Page Content -->
-            <main>
-                <slot />
-            </main>
-        </div>
+        <main class="px-8 py-6">
+            <slot />
+        </main>
     </div>
 </template>
