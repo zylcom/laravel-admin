@@ -23,6 +23,7 @@
         "vue-tsc": "^2.0.24"
     },
     "dependencies": {
+        "@tanstack/vue-table": "^8.20.4",
         "apexcharts": "^3.52.0",
         "lucide-vue-next": "^0.428.0",
         "vue3-apexcharts": "^1.5.3"

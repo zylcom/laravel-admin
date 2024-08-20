@@ -2,13 +2,28 @@
 import { ref } from "vue";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import {
+    ArrowUpDown,
     ChartNoAxesCombined,
     CircleDollarSign,
     Coins,
     HandCoins,
 } from "lucide-vue-next";
 import { Head, usePage } from "@inertiajs/vue3";
+import {
+    useVueTable,
+    createColumnHelper,
+    getCoreRowModel,
+    SortingState,
+    getSortedRowModel,
+    FlexRender,
+} from "@tanstack/vue-table";
 import NavLink from "@/Components/NavLink.vue";
+import type { Product } from "@/types";
+
+const props = defineProps<{
+    popularProducts: Product[];
+    lowStockProducts: Product[];
+}>();
 
 const options = ref({
     chart: { id: "example" },
@@ -32,8 +47,34 @@ const series = ref([
     { name: "series-1", data: [30, 40, 45, 50, 49, 60, 70, 91] },
 ]);
 
-const popularProducts = usePage().props.popularProducts;
-const lowStockProducts = usePage().props.lowStockProducts;
+const columnHelper = createColumnHelper<Product>();
+const popularProductColumns = [
+    { accessorKey: "name", header: "Name" },
+    { accessorKey: "stock", header: "Stock" },
+    { accessorKey: "sold", header: "Sold" },
+    { accessorKey: "price", header: "Price" },
+];
+const sorting = ref<SortingState>([{ id: "sold", desc: true }]);
+
+const popularData = ref<Product>(props.popularProducts);
+
+const popularProductTable = useVueTable({
+    columns: popularProductColumns,
+    data: popularData,
+    getCoreRowModel: getCoreRowModel(),
+    state: {
+        get sorting() {
+            return sorting.value;
+        },
+    },
+    onSortingChange: (updaterOrValue) => {
+        sorting.value =
+            typeof updaterOrValue === "function"
+                ? updaterOrValue(sorting.value)
+                : updaterOrValue;
+    },
+    getSortedRowModel: getSortedRowModel(),
+});
 </script>
 
 <template>
@@ -233,45 +274,54 @@ const lowStockProducts = usePage().props.lowStockProducts;
                 <div class="w-full overflow-auto">
                     <table class="[&_*]:borders w-full table-auto">
                         <thead>
-                            <tr class="border-y">
-                                <th class="py-3 pl-4 text-left">
-                                    <span>Name</span>
-                                </th>
-                                <th class="py-3 pr-4 text-left">
-                                    <span>Sold</span>
-                                </th>
-                                <th class="py-3 pr-4 text-left">
-                                    <span>Stock</span>
-                                </th>
-                                <th class="py-3 pr-4 text-left">
-                                    <span>Price</span>
+                            <tr
+                                v-for="headerGroup in popularProductTable.getHeaderGroups()"
+                                :key="headerGroup.id"
+                                class="border-y"
+                            >
+                                <th
+                                    v-for="header in headerGroup.headers"
+                                    :key="header.id"
+                                    @click="
+                                        header.column.getToggleSortingHandler()?.(
+                                            $event,
+                                        )
+                                    "
+                                    class="py-3"
+                                    :class="{
+                                        'cursor-pointer':
+                                            header.column.getCanSort(),
+                                    }"
+                                >
+                                    <FlexRender
+                                        :render="header.column.columnDef.header"
+                                        :props="header.getContext()"
+                                    />
+
+                                    <ArrowUpDown
+                                        v-show="header.column.getCanSort()"
+                                        class="ml-2 inline-block h-4 w-4"
+                                    />
                                 </th>
                             </tr>
                         </thead>
 
                         <tbody>
                             <tr
-                                class="border-b"
-                                v-for="{
-                                    id,
-                                    name,
-                                    stock,
-                                    price,
-                                    sold,
-                                } in popularProducts"
-                                :key="id"
+                                v-for="row in popularProductTable.getRowModel()
+                                    .rows"
+                                :key="row.id"
+                                class="border-b [&_td:first-of-type]:pl-4 [&_td:last-of-type]:pr-4"
                             >
-                                <td class="px-4 py-6">
-                                    <span>{{ name }}</span>
-                                </td>
-                                <td>
-                                    <span>{{ sold }}</span>
-                                </td>
-                                <td>
-                                    <span>{{ stock }}</span>
-                                </td>
-                                <td class="pr-4">
-                                    <span>{{ price }}</span>
+                                <td
+                                    v-for="cell in row.getVisibleCells()"
+                                    :key="cell.id"
+                                    class="py-6"
+                                >
+                                    <FlexRender
+                                        :render="cell.column.columnDef.cell"
+                                        :props="cell.getContext()"
+                                    />
                                 </td>
                             </tr>
                         </tbody>
