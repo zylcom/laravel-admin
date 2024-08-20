@@ -33,6 +33,7 @@ const series = ref([
 ]);
 
 const popularProducts = usePage().props.popularProducts;
+const lowStockProducts = usePage().props.lowStockProducts;
 </script>
 
 <template>
@@ -229,20 +230,20 @@ const popularProducts = usePage().props.popularProducts;
             <div class="bg-white py-6 lg:col-span-4">
                 <h2 class="px-5">Top Selling</h2>
 
-                <div class="w-full">
-                    <table class="w-full table-auto [&_*]:border">
+                <div class="w-full overflow-auto">
+                    <table class="[&_*]:borders w-full table-auto">
                         <thead>
                             <tr class="border-y">
                                 <th class="py-3 pl-4 text-left">
                                     <span>Name</span>
                                 </th>
-                                <th class="py-3 text-left">
-                                    <span>Sold Quantity</span>
+                                <th class="py-3 pr-4 text-left">
+                                    <span>Sold</span>
                                 </th>
-                                <th class="py-3 text-left">
+                                <th class="py-3 pr-4 text-left">
                                     <span>Stock</span>
                                 </th>
-                                <th class="py-3 text-left">
+                                <th class="py-3 pr-4 text-left">
                                     <span>Price</span>
                                 </th>
                             </tr>
@@ -256,19 +257,20 @@ const popularProducts = usePage().props.popularProducts;
                                     name,
                                     stock,
                                     price,
+                                    sold,
                                 } in popularProducts"
                                 :key="id"
                             >
-                                <td class="py-6 pl-4">
+                                <td class="px-4 py-6">
                                     <span>{{ name }}</span>
                                 </td>
                                 <td>
-                                    <span>{{ stock }}</span>
+                                    <span>{{ sold }}</span>
                                 </td>
                                 <td>
                                     <span>{{ stock }}</span>
                                 </td>
-                                <td>
+                                <td class="pr-4">
                                     <span>{{ price }}</span>
                                 </td>
                             </tr>
@@ -280,17 +282,19 @@ const popularProducts = usePage().props.popularProducts;
             <div class="bg-white px-5 py-6 lg:col-span-2">
                 <h2>Low Quantity Stock</h2>
 
-                <div class="[&_*]:borders flex flex-col gap-y-4">
+                <div class="flex flex-col gap-y-4">
                     <div
                         class="flex items-center gap-x-4"
-                        v-for="i in Array.from({ length: 10 }).map((_, i) => i)"
-                        :key="i"
+                        v-for="{ id, name, stock } in lowStockProducts"
+                        :key="id"
                     >
-                        <div class="h-16 w-14 bg-gray-100"></div>
+                        <div class="h-16 w-14 shrink-0 bg-gray-100"></div>
 
                         <div class="flex flex-col">
-                            <span class="text-base font-semibold">Lays</span>
-                            <span class="text-sm">Stock: 5 pcs</span>
+                            <span class="text-base font-semibold">{{
+                                name
+                            }}</span>
+                            <span class="text-sm">Stock: {{ stock }} pcs</span>
                         </div>
 
                         <div class="ml-auto">

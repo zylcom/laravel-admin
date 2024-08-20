@@ -13,8 +13,9 @@ class DashboardController extends Controller
      */
     public function __invoke(Request $request)
     {
-        $popularProducts = Product::where('stock', '<', 20)->get();
+        $popularProducts = Product::where('sold', '>', 150)->get();
+        $lowStockProducts = Product::where('stock', '<', 20)->get();
 
-        return Inertia::render('Dashboard', ['popularProducts' => $popularProducts]);
+        return Inertia::render('Dashboard', ['popularProducts' => $popularProducts, 'lowStockProducts' => $lowStockProducts]);
     }
 }
