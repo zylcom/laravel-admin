@@ -21,6 +21,7 @@ import {
 import Card from "@/Components/Card.vue";
 import OverviewStats from "@/Components/OverviewStats.vue";
 import type { Product, Stats } from "@/types";
+import SummaryStats from "@/Components/SummaryStats.vue";
 
 const props = defineProps<{
     popularProducts: Product[];
@@ -100,125 +101,20 @@ const salesStats = ref<Stats[]>([
                 />
             </Card>
 
-            <div class="bg-white px-5 py-6 lg:col-span-2">
-                <h2>Inventory Summary</h2>
+            <Card class="lg:col-span-2">
+                <SummaryStats title="Inventory Summary" />
+            </Card>
 
-                <div
-                    class="flex [&_div]:flex [&_div]:flex-col [&_div]:items-center"
-                >
-                    <div class="basis-1/2 pr-5">
-                        <ChartNoAxesCombined
-                            class="col-span-2 mx-auto h-9 w-9 rounded bg-[#E8F1FD] p-1"
-                        />
+            <Card class="lg:col-span-4">
+                <OverviewStats
+                    overviewName="Purchase Overview"
+                    :overviewStats="salesStats"
+                />
+            </Card>
 
-                        <span
-                            class="mt-2 text-base font-semibold text-[color:#5D6679]"
-                            >858</span
-                        >
-                        <span
-                            class="text-center text-xs font-medium text-[color:#444444] lg:text-sm"
-                            >Quantity in hand</span
-                        >
-                    </div>
-
-                    <div class="basis-1/2 pl-5">
-                        <CircleDollarSign
-                            class="col-span-2 mx-auto h-9 w-9 rounded bg-[#ECEAFF] p-1"
-                        />
-
-                        <span
-                            class="mt-2 text-base font-semibold text-[color:#5D6679]"
-                            >2740</span
-                        >
-                        <span
-                            class="text-center text-xs font-medium text-[color:#444444] lg:text-sm"
-                            >To be received</span
-                        >
-                    </div>
-                </div>
-            </div>
-
-            <div class="bg-white px-5 py-6 lg:col-span-4">
-                <h2>Purchase Overview</h2>
-
-                <div
-                    class="flex divide-x [&_div]:grid [&_div]:grid-cols-2 [&_div]:items-center [&_div]:gap-y-8 [&_span:first-of-type]:text-base [&_span:first-of-type]:font-semibold [&_span:first-of-type]:text-[color:#5D6679] [&_span:last-of-type]:text-right [&_span:last-of-type]:text-sm [&_span:last-of-type]:font-medium [&_span:last-of-type]:text-[color:#667085]"
-                >
-                    <div class="basis-1/4 pr-5">
-                        <Coins
-                            class="col-span-2 mx-auto h-9 w-9 rounded bg-[#E8F1FD] p-1 text-[color:#629FF4]"
-                        />
-
-                        <span>1740</span>
-                        <span>Purchase</span>
-                    </div>
-
-                    <div class="basis-1/4 grid-cols-2 px-5">
-                        <HandCoins
-                            class="col-span-2 mx-auto h-9 w-9 rounded bg-[#ECEAFF] p-1 text-[color:#817AF3]"
-                        />
-
-                        <span>12740</span>
-                        <span>Cost</span>
-                    </div>
-
-                    <div class="basis-1/4 grid-cols-2 px-5">
-                        <ChartNoAxesCombined
-                            class="col-span-2 mx-auto h-9 w-9 rounded bg-[#E8F1FD] p-1 text-[color:#DBA362]"
-                        />
-
-                        <span>12740</span>
-                        <span>Cancel</span>
-                    </div>
-
-                    <div class="basis-1/4 pl-5">
-                        <CircleDollarSign
-                            class="col-span-2 mx-auto h-9 w-9 rounded bg-[#ECEAFF] p-1 text-[color:#58D365]"
-                        />
-
-                        <span>12740</span>
-                        <span>Return</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bg-white px-5 py-6 lg:col-span-2">
-                <h2>Order Summary</h2>
-
-                <div
-                    class="flex [&_div]:flex [&_div]:flex-col [&_div]:items-center"
-                >
-                    <div class="basis-1/2">
-                        <ChartNoAxesCombined
-                            class="col-span-2 mx-auto h-9 w-9 rounded bg-[#E8F1FD] p-1"
-                        />
-
-                        <span
-                            class="mt-2 text-base font-semibold text-[color:#5D6679]"
-                            >858</span
-                        >
-                        <span
-                            class="text-center text-sm font-medium text-[color:#444444]"
-                            >Number of suppliers</span
-                        >
-                    </div>
-
-                    <div class="basis-1/2">
-                        <CircleDollarSign
-                            class="col-span-2 mx-auto h-9 w-9 rounded bg-[#ECEAFF] p-1"
-                        />
-
-                        <span
-                            class="mt-2 text-base font-semibold text-[color:#5D6679]"
-                            >2740</span
-                        >
-                        <span
-                            class="text-center text-sm font-medium text-[color:#444444]"
-                            >Number of categories</span
-                        >
-                    </div>
-                </div>
-            </div>
+            <Card class="lg:col-span-2">
+                <SummaryStats title="Order Summary" />
+            </Card>
 
             <div class="bg-white px-5 py-6 lg:col-span-3">
                 <h2>Sales & Purchase chart</h2>
