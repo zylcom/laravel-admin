@@ -17,9 +17,16 @@ export type PageProps<
 };
 
 export type Product = {
+    id: string | number;
     name: string;
     description: string;
     stock: number;
     sold: number;
     price: number;
 };
+
+export interface Stats {
+    icon: Function;
+    name: string;
+    data: string | number;
+}

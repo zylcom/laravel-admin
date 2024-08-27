@@ -26,7 +26,7 @@ const isMenuOpen = ref<boolean>(false);
         class="min-h-screen bg-[#F0F1F3] lg:grid lg:grid-cols-[280px,1fr] lg:grid-rows-[74px,1fr]"
     >
         <aside
-            class="fixed bottom-0 left-0 w-full bg-white px-6 py-2 lg:relative lg:row-span-2"
+            class="fixed border-t border-t-[#F0F1F3] shadow-md z-20 bottom-0 left-0 w-full bg-white px-6 py-2 lg:relative lg:row-span-2"
         >
             <div
                 class="flex w-full flex-wrap justify-between lg:fixed lg:left-0 lg:top-0 lg:max-h-[960px] lg:w-[280px] lg:flex-col lg:flex-nowrap lg:gap-y-8 lg:overflow-auto lg:p-6"

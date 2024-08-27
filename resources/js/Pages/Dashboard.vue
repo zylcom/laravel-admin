@@ -7,8 +7,9 @@ import {
     CircleDollarSign,
     Coins,
     HandCoins,
+    TrendingUp,
 } from "lucide-vue-next";
-import { Head, usePage } from "@inertiajs/vue3";
+import { Head } from "@inertiajs/vue3";
 import {
     useVueTable,
     createColumnHelper,
@@ -17,8 +18,9 @@ import {
     getSortedRowModel,
     FlexRender,
 } from "@tanstack/vue-table";
-import NavLink from "@/Components/NavLink.vue";
-import type { Product } from "@/types";
+import Card from "@/Components/Card.vue";
+import OverviewStats from "@/Components/OverviewStats.vue";
+import type { Product, Stats } from "@/types";
 
 const props = defineProps<{
     popularProducts: Product[];
@@ -56,7 +58,7 @@ const popularProductColumns = [
 ];
 const sorting = ref<SortingState>([{ id: "sold", desc: true }]);
 
-const popularData = ref<Product>(props.popularProducts);
+const popularData = ref<Product[]>(props.popularProducts);
 
 const popularProductTable = useVueTable({
     columns: popularProductColumns,
@@ -75,6 +77,13 @@ const popularProductTable = useVueTable({
     },
     getSortedRowModel: getSortedRowModel(),
 });
+
+const salesStats = ref<Stats[]>([
+    { icon: TrendingUp, name: "Sales", data: 1234 },
+    { icon: HandCoins, name: "Revenue", data: 1234 },
+    { icon: Coins, name: "Profit", data: 1234 },
+    { icon: CircleDollarSign, name: "Cost", data: 1234 },
+]);
 </script>
 
 <template>
@@ -84,49 +93,12 @@ const popularProductTable = useVueTable({
         <div
             class="grid grid-cols-1 gap-6 lg:grid-cols-6 [&>div]:rounded-lg [&_div_h2]:mb-6 [&_div_h2]:text-xl [&_div_h2]:font-medium"
         >
-            <div class="bg-white px-5 py-6 lg:col-span-4">
-                <h2>Purchase Overview</h2>
-
-                <div
-                    class="grid grid-cols-2 gap-x-2 gap-y-6 sm:grid-cols-4 sm:gap-x-0 sm:divide-x [&_div]:flex [&_div]:flex-col [&_div]:items-center [&_div]:gap-y-0 sm:[&_div]:grid sm:[&_div]:grid-cols-2 sm:[&_div]:gap-y-8 lg:[&_div]:flex lg:[&_div]:gap-y-0 xl:[&_div]:grid xl:[&_div]:gap-y-8 [&_span:first-of-type]:mt-2 [&_span:first-of-type]:text-base [&_span:first-of-type]:font-semibold [&_span:first-of-type]:text-[color:#5D6679] sm:[&_span:first-of-type]:mt-0 lg:[&_span:first-of-type]:mt-2 xl:[&_span:first-of-type]:mt-0 [&_span:last-of-type]:text-right [&_span:last-of-type]:text-sm [&_span:last-of-type]:font-medium [&_span:last-of-type]:text-[color:#667085]"
-                >
-                    <div class="basis-1/4 sm:pr-2 md:pr-5">
-                        <Coins
-                            class="col-span-2 mx-auto h-9 w-9 rounded bg-[#E8F1FD] p-1 text-[color:#629FF4]"
-                        />
-
-                        <span>1740</span>
-                        <span>Purchase</span>
-                    </div>
-
-                    <div class="basis-1/4 grid-cols-2 sm:px-2 md:px-5">
-                        <HandCoins
-                            class="col-span-2 mx-auto h-9 w-9 rounded bg-[#ECEAFF] p-1 text-[color:#817AF3]"
-                        />
-
-                        <span>12740</span>
-                        <span>Cost</span>
-                    </div>
-
-                    <div class="basis-1/4 grid-cols-2 sm:px-2 md:px-5">
-                        <ChartNoAxesCombined
-                            class="col-span-2 mx-auto h-9 w-9 rounded bg-[#E8F1FD] p-1 text-[color:#DBA362]"
-                        />
-
-                        <span>12740</span>
-                        <span>Cancel</span>
-                    </div>
-
-                    <div class="basis-1/4 sm:pl-2 md:pl-5">
-                        <CircleDollarSign
-                            class="col-span-2 mx-auto h-9 w-9 rounded bg-[#ECEAFF] p-1 text-[color:#58D365]"
-                        />
-
-                        <span>12740</span>
-                        <span>Return</span>
-                    </div>
-                </div>
-            </div>
+            <Card class="lg:col-span-4">
+                <OverviewStats
+                    overviewName="Sales Overview"
+                    :overviewStats="salesStats"
+                />
+            </Card>
 
             <div class="bg-white px-5 py-6 lg:col-span-2">
                 <h2>Inventory Summary</h2>
